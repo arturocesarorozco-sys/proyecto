@@ -1,0 +1,110 @@
+.page {
+  background: linear-gradient(180deg, #fff3e0, #ffe0b2);
+  min-height: 100vh;
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.page-header {
+  text-align: center;
+  color: #ff7b00;
+  margin-bottom: 20px;
+}
+
+.page-header h1 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.page-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* --- MENÚ DE FILTROS HORIZONTAL --- */
+.filtros {
+  background: #fff8f0;
+  padding: 15px;
+  border-radius: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.filtros h3 {
+  flex-basis: 100%;
+  color: #ff7b00;
+  margin: 0 0 6px 0;
+}
+
+.filtros input,
+.filtros select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ffb366;
+  font-size: 0.95rem;
+}
+
+.filtros label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.filtros .botones {
+  display: flex;
+  gap: 8px;
+}
+
+.filtros button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #ff8c42;
+  color: #fff;
+  font-weight: 500;
+  transition: 0.3s ease;
+}
+
+.filtros button:hover {
+  background: #ff7a1f;
+}
+
+.filtros button.sec {
+  background: #ccc;
+  color: #333;
+}
+
+.filtros button.sec:hover {
+  background: #bbb;
+}
+
+/* --- GRID DE RECETAS --- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 15px;
+  justify-items: center;
+}
+
+.populares h3 {
+  color: #ff7b00;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filtros {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

@@ -1,0 +1,69 @@
+.bubble-menu {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1000;
+}
+
+.main-bubble {
+  background: linear-gradient(135deg, #ff8800, #ffb347);
+  border: none;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  box-shadow: 0 4px 15px rgba(255, 136, 0, 0.4);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.main-bubble:hover {
+  transform: scale(1.1);
+}
+
+.main-bubble img {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+}
+
+.bubble-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+  animation: popUp 0.3s ease;
+}
+
+.bubble-options a {
+  background: #fff4e0;
+  color: #ff8800;
+  text-decoration: none;
+  font-size: 22px;
+  width: 50px;
+  height: 50px;
+  margin: 8px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(255, 136, 0, 0.4);
+  transition: background 0.3s ease;
+}
+
+.bubble-options a:hover {
+  background: #ffe0b3;
+}
+
+@keyframes popUp {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

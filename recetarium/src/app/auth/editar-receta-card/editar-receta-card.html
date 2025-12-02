@@ -1,0 +1,50 @@
+<div class="editar-card">
+  <h3>Editar Receta</h3>
+
+  <div class="form-group">
+    <label>Título</label>
+    <input [(ngModel)]="receta.titulo" placeholder="Título de la receta">
+  </div>
+
+  <div class="form-group">
+    <label>Descripción</label>
+    <textarea [(ngModel)]="receta.descripcion" placeholder="Descripción de la receta"></textarea>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label>Tiempo de preparación (min)</label>
+      <input type="number" [(ngModel)]="receta.tiempo_preparacion">
+    </div>
+    <div class="form-group">
+      <label>Porciones</label>
+      <input type="number" [(ngModel)]="receta.porciones">
+    </div>
+    <div class="form-group">
+      <label>Dificultad</label>
+      <select [(ngModel)]="receta.dificultad">
+        <option value="Fácil">Fácil</option>
+        <option value="Media">Media</option>
+        <option value="Difícil">Difícil</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Pasos -->
+  <div class="pasos-section">
+    <h4>👨‍🍳 Pasos de la receta</h4>
+    <div class="paso-card" *ngFor="let paso of receta.pasos; let i = index">
+      <div class="paso-header">
+        <span>Paso {{ i + 1 }}</span>
+        <button class="danger" (click)="eliminarPaso(i)">🗑️</button>
+      </div>
+      <textarea [(ngModel)]="paso.descripcion" placeholder="Descripción del paso"></textarea>
+    </div>
+    <button class="add-step" (click)="agregarPaso()">➕ Agregar paso</button>
+  </div>
+
+  <div class="botones">
+    <button (click)="guardarCambios()">💾 Guardar cambios</button>
+    <button class="sec" (click)="cancelar()">Cancelar</button>
+  </div>
+</div>

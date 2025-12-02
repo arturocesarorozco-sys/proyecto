@@ -1,0 +1,13 @@
+.page { background: linear-gradient(180deg, #fff3e0, #ffe0b2); min-height: 100vh; padding: 20px; font-family: "Poppins", sans-serif; }
+.page-header { text-align: center; color: #ff8c42; margin-bottom: 2rem; }
+.formulario { background: #fff; border-radius: 20px; padding: 2rem; max-width: 900px; margin: auto; box-shadow: 0 8px 16px rgba(255,123,0,0.25); display: flex; flex-direction: column; gap: 1.5rem; }
+input, textarea, select { padding: 10px; border-radius: 10px; border: 1px solid #ffb347; width: 100%; margin-bottom: 0.8rem; }
+button { background: linear-gradient(145deg, #ffb347, #ff7b00); color: white; border: none; padding: 0.6rem 1rem; border-radius: 10px; cursor: pointer; }
+.ingrediente-form { display: flex; gap: 0.5rem; flex-wrap: wrap; position: relative; }
+.sugerencias { position: absolute; top: 100%; left: 0; background: #fff; border: 1px solid #ccc; width: 100%; z-index: 10; max-height: 150px; overflow-y: auto; border-radius: 8px; }
+.sugerencias li { padding: 5px 10px; cursor: pointer; }
+.sugerencias li:hover { background-color: #ffe0b2; }
+.lista-ingredientes, .lista-pasos { list-style: none; padding: 0; }
+.lista-ingredientes li, .lista-pasos li { background: #fff3e0; margin-bottom: 5px; padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+.acciones-finales { display: flex; justify-content: flex-end; gap: 1rem; }
+.acciones-finales .secundario { background: #ccc; color: #333; }

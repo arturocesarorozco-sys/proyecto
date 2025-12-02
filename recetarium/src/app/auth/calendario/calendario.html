@@ -1,0 +1,55 @@
+<div class="page">
+  <header class="page-header">
+    <h1>
+      📅 Calendario de Recetas 
+      (Semana {{ semana?.fecha_inicio | date:'dd/MM/yyyy' }} → {{ semana?.fecha_fin | date:'dd/MM/yyyy' }})
+    </h1>
+  </header>
+
+  <main class="page-content">
+    <table class="cal-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th *ngFor="let d of diasOrden">{{ d }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let comida of comidas">
+          <td class="comida-label">{{ comida }}</td>
+          <td *ngFor="let dia of diasOrden">
+            <div class="cell">
+              <ng-container *ngIf="getReceta(dia, comida) as rec; else vacioCell">
+                <div class="receta-mini">
+                  <img *ngIf="rec.imagen" [src]="rec.imagen" alt="{{ rec.titulo }}" />
+                  <div class="texto">
+                    <div class="titulo">{{ rec.titulo }}</div>
+                    <div class="meta">Agregada: {{ rec.creado_en | date:'shortDate' }}</div>
+                  </div>
+                  <div class="acciones">
+                    <button (click)="eliminarDetalle(rec, dia, comida)">Eliminar</button>
+                  </div>
+                </div>
+              </ng-container>
+
+              <ng-template #vacioCell>
+                <div class="recetas-list">
+                  <app-misreceta-add-card
+                    *ngFor="let r of misRecetas"
+                    [receta]="r"
+                    [dia]="dia"
+                    [tipo_comida]="comida"
+                    [idSemana]="id_semana"
+                    (agregar)="agregarRecetaAlCalendario(r, dia, comida)">
+                  </app-misreceta-add-card>
+                </div>
+              </ng-template>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+
+  <app-bubble-menu></app-bubble-menu>
+</div>

@@ -1,0 +1,81 @@
+<div class="page">
+  <header class="page-header">
+    <h1>🍳 Agregar Nueva Receta</h1>
+    <p>Completa los campos y añade tus ingredientes y pasos de preparación.</p>
+  </header>
+
+  <main class="formulario">
+    <section class="datos-basicos">
+      <label>Título</label>
+      <input [(ngModel)]="receta.titulo" placeholder="Ej: Ensalada César">
+
+      <label>Descripción</label>
+      <textarea [(ngModel)]="receta.descripcion" placeholder="Breve descripción..."></textarea>
+
+      <label>Tiempo de preparación (min)</label>
+      <input type="number" [(ngModel)]="receta.tiempo_preparacion">
+
+      <label>Porciones</label>
+      <input type="number" [(ngModel)]="receta.porciones">
+
+      <label>Dificultad</label>
+      <select [(ngModel)]="receta.dificultad">
+        <option value="Fácil">Fácil</option>
+        <option value="Media">Media</option>
+        <option value="Difícil">Difícil</option>
+      </select>
+
+      <label>Categoría</label>
+      <select [(ngModel)]="receta.id_categoria">
+        <option [value]="c.id" *ngFor="let c of categorias">{{ c.nombre }}</option>
+      </select>
+
+      <label>URL de Imagen</label>
+      <input [(ngModel)]="receta.imagen" placeholder="https://...">
+    </section>
+
+    <section class="ingredientes">
+      <h3>🧂 Ingredientes</h3>
+      <div class="ingrediente-form">
+        <input [(ngModel)]="ingredienteActual.nombre" placeholder="Nombre del ingrediente"
+               (input)="buscarIngrediente()" autocomplete="off">
+        <ul *ngIf="showSugerencias" class="sugerencias">
+          <li *ngFor="let s of sugerencias" (click)="seleccionarSugerencia(s)">{{ s.nombre }}</li>
+        </ul>
+        <input [(ngModel)]="ingredienteActual.cantidad" placeholder="Cantidad">
+        <input [(ngModel)]="ingredienteActual.unidad" placeholder="Unidad">
+        <input [(ngModel)]="ingredienteActual.nota" placeholder="Nota (opcional)">
+        <button (click)="agregarIngrediente()">➕ Agregar</button>
+      </div>
+
+      <ul class="lista-ingredientes">
+        <li *ngFor="let i of receta.ingredientes; let idx = index">
+          {{ i.nombre }} - {{ i.cantidad }} {{ i.unidad }}
+          <button class="danger" (click)="eliminarIngrediente(idx)">❌</button>
+        </li>
+      </ul>
+    </section>
+
+    <section class="pasos">
+      <h3>👩‍🍳 Pasos</h3>
+      <div class="paso-form">
+        <textarea [(ngModel)]="pasoActual.descripcion" placeholder="Describe el paso..."></textarea>
+        <button (click)="agregarPaso()">➕ Agregar Paso</button>
+      </div>
+
+      <ol class="lista-pasos">
+        <li *ngFor="let p of receta.pasos; let idx = index">
+          {{ p.descripcion }}
+          <button class="danger" (click)="eliminarPaso(idx)">❌</button>
+        </li>
+      </ol>
+    </section>
+
+    <div class="acciones-finales">
+      <button class="guardar" (click)="guardarReceta()">💾 Guardar Receta</button>
+      <button class="secundario" (click)="limpiarFormulario()">🧹 Limpiar</button>
+    </div>
+  </main>
+
+  <app-bubble-menu></app-bubble-menu>
+</div>

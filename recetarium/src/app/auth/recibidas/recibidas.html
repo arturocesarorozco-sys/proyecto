@@ -1,0 +1,24 @@
+<header>
+  <h1>📨 Recetas que te han enviado</h1>
+  <p>Acá verás las recetas que otros usuarios te enviaron. Acepta para agregarlas a tus recetas o rechaza si no las quieres.</p>
+</header>
+
+<main class="page-content">
+  <section *ngIf="cargando" class="loading">Cargando recetas...</section>
+  <section *ngIf="mensajeError" class="error">{{ mensajeError }}</section>
+
+  <section class="grid">
+    <app-receta-enviada-card
+      *ngFor="let r of recibidas"
+      [envio]="r"
+      (actualizar)="eliminarEnvioLocal($event)">
+    </app-receta-enviada-card>
+
+    <div *ngIf="!cargando && recibidas.length === 0" class="vacio">
+      No hay recetas pendientes por aceptar.
+
+      
+    </div>
+  </section>
+    <app-bubble-menu></app-bubble-menu>
+</main>

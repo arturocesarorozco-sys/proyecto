@@ -1,0 +1,216 @@
+.receta-card {
+  width: 100%;
+  max-width: 650px;
+  margin: 1.2rem auto;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+}
+
+/* --- INTRODUCCIÓN --- */
+.introduccion {
+  background-color: #ff8c42;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  height: 220px; /* altura fija */
+  position: relative;
+}
+
+.introduccion:hover {
+  background-color: #ff7a1f;
+}
+
+/* Imagen grande arriba */
+.imagen-container {
+  width: 100%;
+  height: 120px;
+  overflow: hidden;
+}
+
+.imagen-banner {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Texto intro */
+.texto {
+  padding: 0.5rem 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.texto h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.categoria {
+  font-style: italic;
+  opacity: 0.9;
+  margin: 0.2rem 0;
+}
+
+.descripcion {
+  font-size: 0.95rem;
+  opacity: 0.95;
+  margin: 0;
+  line-height: 1.2rem;
+}
+
+/* Flecha */
+.toggle-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 0.5rem;
+}
+
+.flecha {
+  font-size: 1.6rem;
+  transition: transform 0.3s ease;
+}
+
+.flecha.rotar {
+  transform: rotate(180deg);
+}
+
+/* --- DETALLES --- */
+.detalles {
+  background-color: #fff;
+  color: #333;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease, padding 0.3s ease;
+}
+
+.detalles.abierto {
+  padding: 1rem;
+  max-height: 2000px;
+}
+
+.loading {
+  text-align: center;
+  padding: 1rem;
+  color: #ff8c42;
+  font-weight: 500;
+}
+
+.contenido-detalle img.imagen-receta {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
+.contenido-detalle p {
+  margin: 0.4rem 0;
+}
+
+.contenido-detalle h4 {
+  color: #ff8c42;
+  margin-top: 0.8rem;
+}
+
+.contenido-detalle ul,
+.contenido-detalle ol {
+  margin: 0.5rem 0 1rem 1.5rem;
+}
+
+/* --- BOTÓN ENVIAR --- */
+.btn-enviar {
+  margin-top: 1rem;
+  background: #4da3ff;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.btn-enviar:hover {
+  background: #1f8dff;
+}
+
+/* --- POPUP --- */
+.popup-fondo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+}
+
+.popup {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  animation: aparecer 0.3s ease;
+}
+
+.popup h3 {
+  margin: 0;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.popup input {
+  width: 90%;
+  padding: 8px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.botones {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1rem;
+}
+
+.botones button {
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.botones .enviar {
+  background: #4da3ff;
+  color: white;
+}
+
+.botones .cancelar {
+  background: #ff4d4d;
+  color: white;
+}
+
+/* Animación popup */
+@keyframes aparecer {
+  from { transform: scale(0.6); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}

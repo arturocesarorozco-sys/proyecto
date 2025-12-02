@@ -1,0 +1,99 @@
+<div class="receta-card">
+
+  <!-- INTRO -->
+  <div class="introduccion" (click)="toggleDetalles()" role="button" aria-pressed="{{abierta}}">
+    <div class="imagen-container" *ngIf="receta.imagen">
+      <img [src]="receta.imagen" alt="{{ receta.titulo }}" class="imagen-banner" />
+    </div>
+
+    <div class="texto">
+      <div class="titulo-row">
+        <h2 class="titulo">{{ receta.titulo }}</h2>
+
+        <!-- Badge de dieta -->
+        <span [ngClass]="dietaBadgeClass()" class="dieta-badge" title="Tipo de dieta">
+          {{ dietaLabel() }}
+        </span>
+      </div>
+
+      <p class="categoria" *ngIf="receta.categoria_nombre">
+        {{ receta.categoria_nombre }}
+      </p>
+
+      <p class="descripcion">
+        {{ receta.descripcion }}
+      </p>
+    </div>
+
+    <div class="toggle-area">
+      <span class="flecha" [class.rotar]="abierta">▼</span>
+    </div>
+  </div>
+
+  <!-- DETALLES -->
+  <div class="detalles" [class.abierto]="abierta" [style.maxHeight]="abierta ? '2000px' : '0'">
+
+    <div *ngIf="cargando" class="loading">Cargando detalles...</div>
+
+    <div *ngIf="abierta && detalles" class="contenido-detalle">
+      <p><strong>⏱ Tiempo:</strong> {{ receta.tiempo_preparacion }} min</p>
+      <p><strong>🍽 Porciones:</strong> {{ receta.porciones }}</p>
+      <p><strong>🔥 Dificultad:</strong> {{ receta.dificultad }}</p>
+      <p><strong>🥗 Tipo:</strong> {{ dietaLabel() }}</p>
+
+      <hr>
+
+      <div *ngIf="detalles.ingredientes?.length; else noIngredientes">
+        <h4>🧂 Ingredientes:</h4>
+        <ul>
+          <li *ngFor="let ing of detalles.ingredientes">
+            {{ ing.nombre }} — {{ ing.cantidad }} {{ ing.unidad }}
+            <span *ngIf="ing.nota">({{ ing.nota }})</span>
+          </li>
+        </ul>
+      </div>
+      <ng-template #noIngredientes>
+        <p class="muted">No hay ingredientes registrados.</p>
+      </ng-template>
+
+      <div *ngIf="detalles.pasos?.length; else noPasos">
+        <h4>👨‍🍳 Pasos:</h4>
+        <ol>
+          <li *ngFor="let paso of detalles.pasos">
+            {{ paso.numero_paso }}. {{ paso.descripcion }}
+          </li>
+        </ol>
+      </div>
+      <ng-template #noPasos>
+        <p class="muted">No hay pasos registrados.</p>
+      </ng-template>
+
+      <!-- BOTONES -->
+      <div class="acciones-detalles">
+        <button (click)="abrirEditor()">✏️ Editar</button>
+        <button class="danger" (click)="eliminarReceta()">🗑️ Eliminar</button>
+        <button class="enviar" (click)="enviarReceta()">📤 Enviar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- POPUP ENVIAR -->
+  <div *ngIf="showEnviarPopup" class="popup-fondo">
+    <div class="popup">
+      <h3>Enviar receta: {{ receta.titulo }}</h3>
+
+      <div *ngIf="mensajeError" class="msg error">{{ mensajeError }}</div>
+      <div *ngIf="mensajeExito" class="msg exito">{{ mensajeExito }}</div>
+
+      <input type="email" placeholder="Correo del destinatario" [(ngModel)]="correoDestino" />
+
+      <div class="botones">
+        <button class="enviar" (click)="confirmarEnvio()" [disabled]="enviando">
+          {{ enviando ? 'Enviando...' : 'Enviar' }}
+        </button>
+        <button class="cancelar" (click)="cancelarEnvio()" [disabled]="enviando">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+</div>

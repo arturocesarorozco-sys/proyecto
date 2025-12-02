@@ -1,0 +1,93 @@
+<div class="receta-card">
+  
+  <!-- INTRO -->
+  <div class="introduccion" (click)="toggleDetalles()">
+    <div class="imagen-container" *ngIf="receta.imagen">
+      <img [src]="receta.imagen" class="imagen-banner" />
+    </div>
+
+    <div class="texto">
+      <span class="badge"
+        [ngClass]="{
+          'vegana': receta.es_vegana == 1,
+          'vegetariana': receta.es_vegetariana == 1 && receta.es_vegana == 0,
+          'normal': receta.es_vegana == 0 && receta.es_vegetariana == 0
+        }">
+        {{
+          receta.es_vegana ? 'Vegana 🌱' :
+          receta.es_vegetariana ? 'Vegetariana 🥗' :
+          'Normal 🍖'
+        }}
+      </span>
+
+      <h2>{{ receta.titulo }}</h2>
+      <p class="categoria">{{ receta.categoria }}</p>
+      <p class="descripcion">{{ receta.descripcion }}</p>
+    </div>
+
+    <div class="toggle-area">
+      <span class="flecha" [class.rotar]="abierta">▼</span>
+    </div>
+  </div>
+
+  <!-- DETALLES + COMENTARIOS LADO DERECHO -->
+  <div class="detalles" [class.abierto]="abierta">
+
+    <div *ngIf="detalles && abierta" class="detalle-wrapper">
+
+      <!-- COLUMNA IZQUIERDA (tus detalles normales) -->
+      <div class="col-detalles">
+        
+        <p><strong>⏱ Tiempo:</strong> {{ receta.tiempo_preparacion }} min</p>
+        <p><strong>🍽 Porciones:</strong> {{ receta.porciones }}</p>
+        <p><strong>🔥 Dificultad:</strong> {{ receta.dificultad }}</p>
+
+        <h4>🧂 Ingredientes:</h4>
+        <ul>
+          <li *ngFor="let ing of detalles.ingredientes">
+            {{ ing.nombre }} — {{ ing.cantidad }} {{ ing.unidad }}
+          </li>
+        </ul>
+
+        <h4>👨‍🍳 Pasos:</h4>
+        <ol>
+          <li *ngFor="let paso of detalles.pasos">
+            {{ paso.numero_paso }}. {{ paso.descripcion }}
+          </li>
+        </ol>
+      </div>
+
+      <!-- COLUMNA DERECHA (comentarios + likes) -->
+      <div class="col-social">
+
+        <div class="likes-box">
+          <button class="like-btn" 
+                  [class.liked]="liked"
+                  (click)="toggleLike()">
+            ❤️ {{ likes }}
+          </button>
+        </div>
+
+        <h4>💬 Comentarios</h4>
+
+        <div class="comentario" *ngFor="let c of comentarios">
+          <p class="autor">
+            <strong>{{ c.nombre || 'Usuario' }}</strong>
+          </p>
+          <p>{{ c.comentario }}</p>
+          <small>{{ c.fecha | date:'short' }}</small>
+        </div>
+
+        <textarea [(ngModel)]="nuevoComentario"
+                  placeholder="Escribe un comentario..."></textarea>
+
+        <button class="btn-enviar" (click)="enviarComentario()">
+          Publicar
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>

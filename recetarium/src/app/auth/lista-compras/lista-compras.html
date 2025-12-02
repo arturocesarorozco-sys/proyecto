@@ -1,0 +1,20 @@
+<div class="page-container">
+  <app-bubble-menu></app-bubble-menu>
+
+  <h2 class="page-title">🧺 Lista de Compras</h2>
+
+  <div class="lista-container">
+    <div class="add-item">
+      <input type="text" placeholder="Agregar ingrediente..." [(ngModel)]="nuevoItem" />
+      <button (click)="agregarItem()">Agregar</button>
+    </div>
+
+    <ul class="lista">
+      <li *ngFor="let item of lista; let i = index">
+        <input type="checkbox" [(ngModel)]="item.comprado" />
+        <span [class.comprado]="item.comprado">{{ item.nombre }}</span>
+        <button class="eliminar" (click)="eliminarItem(i)">✖</button>
+      </li>
+    </ul>
+  </div>
+</div>

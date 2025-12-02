@@ -1,0 +1,63 @@
+.page-container {
+  padding: 2rem;
+  background: #fff6f0;
+  min-height: 100vh;
+  text-align: center;
+}
+
+.page-title {
+  color: #ff7b00;
+  margin-bottom: 1.5rem;
+}
+
+.perfil {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.foto-perfil {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #ff7b00;
+  margin-bottom: 0.5rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+input {
+  border: 2px solid #ff7b00;
+  border-radius: 10px;
+  padding: 0.6rem;
+}
+
+button {
+  background: #ff7b00;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 0.6rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: #ff9b40;
+}
+
+.cerrar {
+  background: #ff4b4b;
+}
+
+.cerrar:hover {
+  background: #ff7070;
+}

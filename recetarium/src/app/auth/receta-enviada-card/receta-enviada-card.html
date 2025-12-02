@@ -1,0 +1,43 @@
+<div class="receta-enviada-card">
+  <div class="cabecera" (click)="toggleDetalles()">
+    <div class="texto-cab">
+      <h3>{{ envio.titulo }}</h3>
+      <p class="meta">Enviado por: <strong>{{ envio.remitente_nombre }}</strong> — {{ envio.fecha_envio | date:'short' }}</p>
+    </div>
+    <div class="acciones">
+      <button class="guardar" (click)="aceptar()" [disabled]="procesando">{{ procesando ? 'Procesando...' : 'Aceptar' }}</button>
+      <button class="no-guardar" (click)="rechazar()" [disabled]="procesando">Rechazar</button>
+    </div>
+  </div>
+
+  <div class="contenido" [class.abierto]="abierta">
+    <img *ngIf="envio.imagen" [src]="envio.imagen" alt="{{ envio.titulo }}" class="thumb" />
+
+    <p><strong>Descripción:</strong> {{ envio.descripcion }}</p>
+    <p *ngIf="envio.categoria_nombre"><strong>Categoría:</strong> {{ envio.categoria_nombre }}</p>
+    <p *ngIf="envio.tiempo_preparacion"><strong>Tiempo:</strong> {{ envio.tiempo_preparacion }} min</p>
+    <p *ngIf="envio.porciones"><strong>Porciones:</strong> {{ envio.porciones }}</p>
+    <p *ngIf="envio.dificultad"><strong>Dificultad:</strong> {{ envio.dificultad }}</p>
+
+    <div *ngIf="envio.ingredientes?.length">
+      <h4>🧂 Ingredientes:</h4>
+      <ul>
+        <li *ngFor="let ing of envio.ingredientes">
+          {{ ing.nombre }} — {{ ing.cantidad }} {{ ing.unidad }}
+          <span *ngIf="ing.nota">({{ ing.nota }})</span>
+        </li>
+      </ul>
+    </div>
+
+    <div *ngIf="envio.pasos?.length">
+      <h4>👨‍🍳 Pasos:</h4>
+      <ol>
+        <li *ngFor="let paso of envio.pasos">
+          {{ paso.numero_paso }}. {{ paso.descripcion }}
+        </li>
+      </ol>
+    </div>
+
+    <div *ngIf="mensaje" class="mensaje">{{ mensaje }}</div>
+  </div>
+</div>

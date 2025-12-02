@@ -1,0 +1,210 @@
+.receta-card {
+  width: 100%;
+  max-width: 650px;
+  margin: 1.2rem auto;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+}
+
+/* --- INTRODUCCIÓN --- */
+.introduccion {
+  background-color: #ff8c42;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  height: 220px; /* altura fija para tarjetas cerradas */
+  position: relative;
+}
+
+.introduccion:hover {
+  background-color: #ff7a1f;
+}
+
+/* Imagen grande arriba */
+.imagen-container {
+  width: 100%;
+  height: 120px;
+  overflow: hidden;
+}
+
+.imagen-banner {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Texto de introducción */
+.texto {
+  padding: 0.5rem 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.texto h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.categoria {
+  font-style: italic;
+  opacity: 0.9;
+  margin: 0.2rem 0;
+}
+
+.descripcion {
+  font-size: 0.95rem;
+  opacity: 0.95;
+  margin: 0;
+  line-height: 1.2rem;
+}
+
+/* Flecha dentro de la introducción */
+.toggle-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 0.5rem;
+}
+
+.flecha {
+  font-size: 1.6rem;
+  transition: transform 0.3s ease;
+}
+
+.flecha.rotar {
+  transform: rotate(180deg);
+}
+
+/* --- DETALLES --- */
+.detalles {
+  background-color: #fff;
+  color: #333;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease, padding 0.3s ease;
+}
+
+.detalles.abierto {
+  padding: 1rem;
+  max-height: 2000px; /* altura máxima grande para todo el contenido */
+}
+
+.loading {
+  text-align: center;
+  padding: 1rem;
+  color: #ff8c42;
+  font-weight: 500;
+}
+
+.contenido-detalle img.imagen-receta {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
+.contenido-detalle p {
+  margin: 0.4rem 0;
+}
+
+.contenido-detalle h4 {
+  color: #ff8c42;
+  margin-top: 0.8rem;
+}
+
+.contenido-detalle ul,
+.contenido-detalle ol {
+  margin: 0.5rem 0 1rem 1.5rem;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+  margin-bottom: 5px;
+  color: #fff;
+}
+
+.badge.vegana {
+  background-color: #2ecc71;
+}
+
+.badge.vegetariana {
+  background-color: #f1c40f;
+}
+
+.badge.normal {
+  background-color: #7f8c8d;
+}
+
+.detalle-wrapper {
+  display: flex;
+  gap: 20px;
+}
+
+.col-detalles {
+  width: 65%;
+}
+
+.col-social {
+  width: 35%;
+  padding-left: 10px;
+  border-left: 2px solid #eee;
+}
+
+.like-btn {
+  padding: 8px 14px;
+  background: #ff4f4f;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+.comentario {
+  background: #fafafa;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+textarea {
+  width: 100%;
+  min-height: 70px;
+  margin-top: 10px;
+  border-radius: 10px;
+  padding: 8px;
+  border: 1px solid #ccc;
+}
+
+.btn-enviar {
+  margin-top: 8px;
+  background: #ff8c42;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.like-btn.liked {
+  background: #ff1a1a; /* Rojo más intenso cuando está like */
+  transform: scale(1.05); /* Pequeña animación */
+  transition: all 0.2s ease;
+}

@@ -1,0 +1,180 @@
+page {
+  padding: 20px;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fff3e0, #ffe0b2);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.page-header {
+  text-align: center;
+  color: #ff7b00;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  font-weight: 700;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.cal-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.cal-table th,
+.cal-table td {
+  padding: 14px;
+  border-bottom: 1px solid #ffe6cc;
+  text-align: center;
+  vertical-align: middle;
+  position: relative;
+}
+
+.cal-table thead th {
+  background: #ff7b00;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.comida-label {
+  width: 120px;
+  background: #fff5ec;
+  font-weight: 600;
+  color: #ff7b00;
+  font-size: 0.95rem;
+}
+
+.cell {
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vacio button,
+.btn-agregar {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  background: #ff9800;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.vacio button:hover,
+.btn-agregar:hover {
+  background: #ff7b00;
+  transform: translateY(-2px);
+}
+
+.receta-mini {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  background: #fff8f0;
+  border-radius: 12px;
+  padding: 8px 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.receta-mini:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+.receta-mini img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.receta-mini .texto {
+  text-align: left;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.receta-mini .titulo {
+  font-weight: 700;
+  color: #ff7b00;
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
+.receta-mini .meta {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.receta-mini .acciones button {
+  background: #ff4d4d;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.receta-mini .acciones button:hover {
+  background: #ff1a1a;
+}
+
+.mis-recetas {
+  margin-top: 30px;
+  padding: 10px;
+  background: #fff3e0;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+}
+
+.mis-recetas h2 {
+  color: #ff7b00;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.recetas-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .cal-table th,
+  .cal-table td {
+    padding: 10px;
+  }
+
+  .receta-mini {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .receta-mini img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+}
+
+
+

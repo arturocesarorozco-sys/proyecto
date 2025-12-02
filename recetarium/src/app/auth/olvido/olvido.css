@@ -1,0 +1,31 @@
+.olvido-container {
+  max-width: 400px;
+  margin: 100px auto;
+  background-color: #fff5ee;
+  padding: 25px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(255, 165, 0, 0.3);
+}
+
+h1 {
+  color: #ff6600;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ffa366;
+  border-radius: 8px;
+}
+
+button {
+  margin-top: 15px;
+  background-color: #ff6600;
+  color: white;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  border-radius: 8px;
+  cursor: pointer;
+}

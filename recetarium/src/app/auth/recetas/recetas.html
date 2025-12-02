@@ -1,0 +1,59 @@
+<div class="page">
+  <header class="page-header">
+    <h1>🍲 Recetario Global</h1>
+    <p>Explora recetas compartidas por otros usuarios</p>
+  </header>
+
+  <main class="page-content">
+    <aside class="filtros">
+      <h3>Filtros</h3>
+
+      <!-- 🔎 BUSCAR -->
+      <input 
+        placeholder="Buscar receta..." 
+        [(ngModel)]="filtros.search" 
+        (input)="cargarRecetas()">
+
+      <!-- 🧩 CATEGORÍA -->
+      <select [(ngModel)]="filtros.categoria" (change)="cargarRecetas()">
+        <option value="">— Categoría —</option>
+        <option value="1">Desayuno</option>
+        <option value="2">Comida</option>
+        <option value="3">Cena</option>
+      </select>
+
+      <!-- 🌱 VEGETARIANA -->
+      <label>
+        <input 
+          type="checkbox" 
+          [(ngModel)]="filtros.es_vegetariana" 
+          (change)="cargarRecetas()">
+        Vegetariana
+      </label>
+
+      <!-- 🥦 VEGANA -->
+      <label>
+        <input 
+          type="checkbox" 
+          [(ngModel)]="filtros.es_vegana" 
+          (change)="cargarRecetas()">
+        Vegana
+      </label>
+
+      <div class="botones">
+        <button (click)="cargarRecetas()">Aplicar</button>
+        <button class="sec" (click)="limpiarFiltros()">Limpiar</button>
+      </div>
+    </aside>
+
+    <!-- 📌 LISTA DE RECETAS -->
+    <section class="grid">
+      <app-receta-card 
+        *ngFor="let r of recetas" 
+        [receta]="r">
+      </app-receta-card>
+    </section>
+  </main>
+
+  <app-bubble-menu></app-bubble-menu>
+</div>

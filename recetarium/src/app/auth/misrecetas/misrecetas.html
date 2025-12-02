@@ -1,0 +1,60 @@
+<header>
+  <h1>👩‍🍳 Mis Recetas</h1>
+  <p>Aquí puedes editar, eliminar y filtrar tus recetas guardadas.</p>
+</header>
+
+<main class="page-content">
+
+  <!-- BARRA DE FILTROS -->
+  <section class="filtros-bar">
+    <input type="text" placeholder="Buscar por nombre..." [(ngModel)]="filtroNombre" (input)="filtrar()" />
+
+    <select [(ngModel)]="filtroCategoria" (change)="filtrar()">
+      <option value="">Todas las categorías</option>
+      <option *ngFor="let c of categorias" [value]="c.id">{{ c.nombre }}</option>
+    </select>
+
+    <select [(ngModel)]="filtroVegana" (change)="filtrar()">
+      <option value="">Vegana (cualquiera)</option>
+      <option value="1">Solo veganas</option>
+      <option value="0">No veganas</option>
+    </select>
+
+    <select [(ngModel)]="filtroVegetariana" (change)="filtrar()">
+      <option value="">Vegetariana (cualquiera)</option>
+      <option value="1">Solo vegetarianas</option>
+      <option value="0">No vegetarianas</option>
+    </select>
+
+    <button class="reset" (click)="resetFiltros()">Reset</button>
+  </section>
+
+  <section class="status-row" *ngIf="cargando || mensajeInfo">
+    <div *ngIf="cargando" class="loading-inline">Cargando recetas...</div>
+    <div *ngIf="mensajeInfo" class="info-inline">{{ mensajeInfo }}</div>
+  </section>
+
+  <!-- GRID DE TARJETAS -->
+  <section class="grid">
+    <app-misreceta-card
+      *ngFor="let r of recetasUsuario"
+      [receta]="r"
+      (editar)="editarReceta($event)"
+      (eliminar)="eliminarReceta($event)"
+      (enviar)="onEnviar($event)">
+    </app-misreceta-card>
+
+    <div *ngIf="!cargando && recetasUsuario.length === 0" class="vacio">
+      No hay recetas para mostrar.
+    </div>
+  </section>
+
+  <app-editar-receta-card
+    *ngIf="recetaEditando"
+    [receta]="recetaEditando"
+    (cerrar)="cerrarEditor()"
+    (recetaActualizada)="onRecetaActualizada($event)">
+  </app-editar-receta-card>
+
+  <app-bubble-menu></app-bubble-menu>
+</main>

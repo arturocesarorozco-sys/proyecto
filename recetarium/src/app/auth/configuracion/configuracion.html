@@ -1,0 +1,18 @@
+<div class="page-container">
+  <app-bubble-menu></app-bubble-menu>
+
+  <h2 class="page-title">⚙️ Configuración</h2>
+
+  <div class="perfil">
+    <img [src]="imagenPerfil || 'assets/default-user.png'" alt="Perfil" class="foto-perfil" />
+    <input type="file" (change)="cambiarImagen($event)" />
+  </div>
+
+  <form (ngSubmit)="guardarCambios()">
+    <input type="text" [(ngModel)]="nombre" name="nombre" placeholder="Nombre" required />
+    <input type="email" [(ngModel)]="correo" name="correo" placeholder="Correo electrónico" required />
+
+    <button type="submit">Guardar Cambios</button>
+    <button type="button" class="cerrar" (click)="cerrarSesion()">Cerrar Sesión</button>
+  </form>
+</div>

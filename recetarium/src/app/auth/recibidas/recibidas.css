@@ -1,0 +1,5 @@
+.page-content { max-width: 1000px; margin: 1.2rem auto; padding: 0 1rem; }
+.loading { color: #ff8c42; text-align: center; padding: 1rem; }
+.error { color: #c0392b; text-align: center; padding: 1rem; }
+.grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+.vacio { text-align: center; padding: 2rem; color: #666; }

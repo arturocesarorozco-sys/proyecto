@@ -1,0 +1,79 @@
+.login-container {
+  max-width: 380px;
+  margin: 80px auto;
+  padding: 35px;
+  background-color: #fff5ee;
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(255, 140, 0, 0.3);
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+h2 {
+  color: #ff6600;
+  margin-bottom: 25px;
+  font-size: 1.8rem;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #ffa366;
+  outline: none;
+  font-size: 15px;
+}
+
+button {
+  background-color: #ff6600;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  width: 100%;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: #e65c00;
+}
+
+button:disabled {
+  background-color: #ffb380;
+  cursor: not-allowed;
+}
+
+.links,
+.register-link {
+  margin-top: 10px;
+}
+
+a {
+  color: #ff6600;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* 📱 Adaptación móvil */
+@media (max-width: 600px) {
+  .login-container {
+    margin: 40px 20px;
+    padding: 25px;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  input,
+  button {
+    font-size: 14px;
+  }
+}
+

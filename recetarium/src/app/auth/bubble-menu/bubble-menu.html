@@ -1,0 +1,16 @@
+<div class="bubble-menu" [class.open]="menuAbierto">
+  <button class="main-bubble" (click)="toggleMenu()">
+    <img src="assets/logo.png" alt="Logo" />
+  </button>
+
+  <div class="bubble-options" *ngIf="menuAbierto">
+    <a routerLink="/main" (click)="toggleMenu()">🏠</a>
+    <a routerLink="/recetas" (click)="toggleMenu()">🍲</a>
+    <a routerLink="/misrecetas" (click)="toggleMenu()">📘</a>
+    <a routerLink="/calendario" (click)="toggleMenu()">📅</a>
+    <a routerLink="/agregar-receta" (click)="toggleMenu()">➕</a>
+    <a routerLink="/lista-compras" (click)="toggleMenu()">🛒</a>
+    <a routerLink="/recibidas" (click)="toggleMenu()">📤</a>
+    <a routerLink="/configuracion" (click)="toggleMenu()">⚙️</a>
+  </div>
+</div>
