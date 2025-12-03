@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import mysql from 'mysql2'
 import recetasRoutes from './routes/recetas.js';
 import usuariosRoutes from './routes/usuarios.js';
 import misRecetasRoutes from './routes/misrecetas.js'; 
