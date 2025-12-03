@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment'
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { debounceTime, distinctUntilChanged, switchMap, of } from 'rxjs';
 import { BubbleMenuComponent } from '../bubble-menu/bubble-menu';
@@ -51,7 +52,7 @@ export class AgregarRecetaComponent implements OnInit {
       return;
     }
 
-    this.http.get<any[]>(`http://localhost:3000/api/agregarrecetas/ingredientes/buscar?q=${this.ingredienteActual.nombre}`)
+    this.http.get<any[]>(`${environment.apiUrl}/api/agregarrecetas/ingredientes/buscar?q=${this.ingredienteActual.nombre}`)
       .subscribe(res => {
         this.sugerencias = res;
         this.showSugerencias = res.length > 0;
@@ -90,7 +91,7 @@ export class AgregarRecetaComponent implements OnInit {
     if (!this.receta.titulo || !this.receta.descripcion) return alert('Título y descripción son obligatorios');
 
     const payload = { ...this.receta, id_usuario: this.usuarioLogeadoId };
-    this.http.post('http://localhost:3000/api/agregarrecetas', payload).subscribe({
+    this.http.post('${environment.apiUrl}/api/agregarrecetas', payload).subscribe({
       next: (res: any) => {
         alert(`Receta "${this.receta.titulo}" creada exitosamente 🎉`);
         this.limpiarFormulario();

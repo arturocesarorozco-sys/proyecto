@@ -3,6 +3,7 @@ import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +18,7 @@ export class RegisterComponent {
   contrasena = '';
   confirmarContrasena = '';
 
-  private apiUrl = 'http://localhost:3000/api/usuarios'; // URL de tu backend
+  private apiUrl = `${environment.apiUrl}/api/usuarios`; // URL de tu backend
 
   constructor(private http: HttpClient, private router: Router) {}
 

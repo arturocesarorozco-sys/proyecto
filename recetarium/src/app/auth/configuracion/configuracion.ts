@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../environments/environment';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BubbleMenuComponent } from '../../auth/bubble-menu/bubble-menu';
@@ -50,7 +51,7 @@ export class ConfiguracionComponent {
       foto_perfil: this.imagenPerfil
     };
 
-    this.http.put(`http://localhost:3000/api/usuarios/${this.usuario.id_usuario}`, datosActualizados)
+    this.http.put(`${environment.apiUrl}/api/usuarios/${this.usuario.id_usuario}`, datosActualizados)
       .subscribe({
         next: (res: any) => {
           alert('✅ Cambios guardados correctamente');

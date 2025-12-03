@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment';
 import { SemanaService, MisReceta } from '../semana/semana.service';
 
 type TipoComida = 'Desayuno' | 'Comida' | 'Cena';
@@ -35,7 +36,7 @@ export class MisRecetaAddCardComponent {
 
       // Obtener detalles desde la API
       this.http.get<{ receta: MisReceta; ingredientes: any[]; pasos: any[] }>(
-        `http://localhost:3000/api/misrecetas/${this.receta.id_mis_receta}`
+        `${environment.apiUrl}/api/misrecetas/${this.receta.id_mis_receta}`
       ).subscribe({
         next: (res) => {
           this.detalles = {

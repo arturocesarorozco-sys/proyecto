@@ -4,6 +4,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BubbleMenuComponent } from '../../auth/bubble-menu/bubble-menu';
 import { RecetaCardComponent } from '../../auth/receta-card/receta-card';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-recetas',
@@ -37,7 +38,7 @@ export class RecetasComponent {
     if (this.filtros.search) params.search = this.filtros.search.trim();
 
     const query = new URLSearchParams(params).toString();
-    const url = `http://localhost:3000/api/recetas${query ? '?' + query : ''}`;
+    const url = `${environment.apiUrl}/api/recetas${query ? '?' + query : ''}`;
 
     this.http.get<any[]>(url).subscribe({
       next: res => this.recetas = res,

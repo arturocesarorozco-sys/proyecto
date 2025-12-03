@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-receta-card',
@@ -46,7 +47,7 @@ export class RecetaCardComponent implements OnInit {
 
     this.cargando = true;
 
-    this.http.get(`http://localhost:3000/api/recetas/${this.receta.id_receta}`).subscribe({
+    this.http.get(`${environment.apiUrl}/api/recetas/${this.receta.id_receta}`).subscribe({
       next: (data) => {
         this.detalles = data;
         this.abierta = true;
@@ -59,7 +60,7 @@ export class RecetaCardComponent implements OnInit {
 
   // Carga comentarios y likes de la receta
   cargarSocial() {
-    this.http.get<any>(`http://localhost:3000/api/recetas/${this.receta.id_receta}/social`)
+    this.http.get<any>(`${environment.apiUrl}/api/recetas/${this.receta.id_receta}/social`)
       .subscribe(res => {
         this.comentarios = res.comentarios;
         this.likes = res.likes;
@@ -81,7 +82,7 @@ export class RecetaCardComponent implements OnInit {
       comentario: this.nuevoComentario
     };
 
-    this.http.post(`http://localhost:3000/api/recetas/comentar`, body)
+    this.http.post(`${environment.apiUrl}/api/recetas/comentar`, body)
       .subscribe((res: any) => {
         this.nuevoComentario = "";
         // Actualizar comentarios desde la respuesta del backend
@@ -102,7 +103,7 @@ export class RecetaCardComponent implements OnInit {
       id_receta: this.receta.id_receta
     };
 
-    this.http.post(`http://localhost:3000/api/recetas/like`, body)
+    this.http.post(`${environment.apiUrl}/api/recetas/like`, body)
       .subscribe((res: any) => {
         this.liked = res.liked;
         this.likes = res.likes; // Actualiza directamente el número de likes

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 // Interfaces para tipado fuerte
 export interface RecetaDetalle {
@@ -43,8 +44,8 @@ export interface MisReceta {
 
 @Injectable({ providedIn: 'root' })
 export class SemanaService {
-  private base = 'http://localhost:3000/api/semana';
-  private baseRecetas = 'http://localhost:3000/api/misrecetas';
+  private base = `${environment.apiUrl}/api/semana`;
+  private baseRecetas = `${environment.apiUrl}/api/misrecetas`;
 
   constructor(private http: HttpClient) {}
 

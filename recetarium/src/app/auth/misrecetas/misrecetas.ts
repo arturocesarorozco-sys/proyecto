@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { BubbleMenuComponent } from '../bubble-menu/bubble-menu';
 import { MisRecetaCardComponent } from '../misreceta-card/misreceta-card';
 import { EditarRecetaCardComponent } from '../editar-receta-card/editar-receta-card';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-misrecetas',
@@ -53,7 +54,7 @@ export class MisRecetasComponent {
   }
 
   private cargarCategoriasOpcionales() {
-    this.http.get<any[]>('http://localhost:3000/api/categorias').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/api/categorias`).subscribe({
       next: res => {
         if (Array.isArray(res) && res.length) {
           this.categorias = res.map(c => ({ id: c.id_categoria ?? c.id, nombre: c.nombre }));
@@ -66,7 +67,7 @@ export class MisRecetasComponent {
   cargarMisRecetas() {
     if (!this.usuario?.id_usuario) return;
     this.cargando = true;
-    this.http.get<any[]>(`http://localhost:3000/api/misrecetas/mis/${this.usuario.id_usuario}`).subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/api/misrecetas/mis/${this.usuario.id_usuario}`).subscribe({
       next: res => {
         this.recetasOriginales = res;       // guardamos todas las recetas completas
         this.recetasUsuario = [...res];     // inicializamos la lista visible
@@ -143,7 +144,7 @@ export class MisRecetasComponent {
 
   eliminarReceta(id: number) {
     if (!confirm('¿Seguro que deseas eliminar esta receta?')) return;
-    this.http.delete(`http://localhost:3000/api/misrecetas/${id}`).subscribe({
+    this.http.delete(`${environment.apiUrl}/api/misrecetas/${id}`).subscribe({
       next: () => this.cargarMisRecetas(),
       error: err => console.error('Error eliminando receta', err)
     });

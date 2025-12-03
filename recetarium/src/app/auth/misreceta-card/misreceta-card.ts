@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-misreceta-card',
@@ -105,7 +106,7 @@ export class MisRecetaCardComponent {
       correo_destino: this.correoDestino
     };
 
-    this.http.post<any>('http://localhost:3000/api/misrecetas/enviar-correo', payload).subscribe({
+    this.http.post<any>(`${environment.apiUrl}/api/misrecetas/enviar-correo`, payload).subscribe({
       next: (res) => {
         this.enviando = false;
         this.mensajeExito = res?.mensaje || 'Receta enviada correctamente';

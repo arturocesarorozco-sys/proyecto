@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment';
 import { BubbleMenuComponent } from '../../auth/bubble-menu/bubble-menu';
 import { RecetaCardComponent } from '../../auth/receta-card/receta-card';
 
@@ -37,7 +38,7 @@ export class MainComponent {
     if (this.filtros.es_vegana) params.es_vegana = '1';
 
     const query = new URLSearchParams(params).toString();
-    const url = `http://localhost:3000/api/recetas${query ? '?' + query : ''}`;
+    const url = `${environment.apiUrl}/api/recetas${query ? '?' + query : ''}`;
 
     this.http.get<any[]>(url).subscribe({
       next: (res) => this.populares = res,

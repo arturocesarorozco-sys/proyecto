@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-receta-enviada-card',
@@ -26,7 +27,7 @@ export class RecetaEnviadaCardComponent {
     if (this.procesando) return;
     this.procesando = true;
     this.mensaje = null;
-    this.http.post<any>('http://localhost:3000/api/misrecetas/aceptar', { id_envio: this.envio.id_envio }).subscribe({
+    this.http.post<any>(`${environment.apiUrl}/api/misrecetas/aceptar`, { id_envio: this.envio.id_envio }).subscribe({
       next: res => {
         this.procesando = false;
         this.mensaje = res?.mensaje || 'Receta aceptada';
@@ -45,7 +46,7 @@ export class RecetaEnviadaCardComponent {
     if (!confirm('¿Seguro que deseas rechazar esta receta?')) return;
     this.procesando = true;
     this.mensaje = null;
-    this.http.post<any>('http://localhost:3000/api/misrecetas/rechazar', { id_envio: this.envio.id_envio }).subscribe({
+    this.http.post<any>(`${environment.apiUrl}/api/misrecetas/rechazar`, { id_envio: this.envio.id_envio }).subscribe({
       next: res => {
         this.procesando = false;
         this.mensaje = res?.mensaje || 'Receta rechazada';

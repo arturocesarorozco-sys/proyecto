@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { environment } from '../../../environments/environment';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @Component({
@@ -28,7 +29,7 @@ export class LoginComponent {
     this.loading = true;
 
     this.http
-      .post<any>('http://localhost:3000/api/usuarios/login', {
+      .post<any>(`${environment.apiUrl}/api/usuarios/login`, {
         correo: this.email,
         contraseña: this.password
       })

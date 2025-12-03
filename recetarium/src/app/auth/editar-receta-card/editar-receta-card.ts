@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @Component({
@@ -19,7 +20,7 @@ export class EditarRecetaCardComponent {
 
   guardarCambios() {
     // Llamada al backend de mis_recetas
-    this.http.put(`http://localhost:3000/api/misrecetas/${this.receta.id_mis_receta}`, this.receta).subscribe({
+    this.http.put(`${environment.apiUrl}/api/misrecetas/${this.receta.id_mis_receta}`, this.receta).subscribe({
       next: () => {
         alert('Receta actualizada correctamente');
         // Emitimos la receta actualizada para que el padre recargue
