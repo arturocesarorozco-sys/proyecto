@@ -41,29 +41,20 @@
           }
         },
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular/build:application",
           "options": {
-            "outputPath": "dist/recetarium",
-            "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
-            "tsConfig": "tsconfig.app.json",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
-            ],
-            "styles": [
-              "src/styles.css"
-            ],
-            "server": "src/main.server.ts",
-            "outputMode": "server",
-            "ssr": {
-              "entry": "src/server.ts"
-            }
-          },
+          "outputPath": "dist/recetarium",
+          "index": "src/index.html",
+          "browser": "src/main.ts",
+          "server": "src/main.server.ts",
+          "polyfills": ["zone.js"],
+          "tsConfig": "tsconfig.app.json",
+          "assets": ["src/assets", "src/favicon.ico"],
+          "styles": ["src/styles.css"],
+          "ssr": {
+            "entry": "src/server.ts"
+          }
+        },
           "configurations": {
             "production": {
               "budgets": [
@@ -90,6 +81,9 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "buildTarget": "recetarium:build-spa"
+          },
           "configurations": {
             "production": {
               "buildTarget": "recetarium:build:production"

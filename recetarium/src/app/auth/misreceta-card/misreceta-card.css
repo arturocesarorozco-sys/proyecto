@@ -245,3 +245,15 @@
   from { transform: scale(0.6); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
+
+.btn-publicar {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #6c5ce7;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+}

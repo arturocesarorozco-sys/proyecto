@@ -208,3 +208,13 @@ textarea {
   transform: scale(1.05); /* Pequeña animación */
   transition: all 0.2s ease;
 }
+
+.btn-agregar {
+  background: #2ecc71;
+  color: #fff;
+  border: none;
+  padding: 8px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}

@@ -1,20 +1,30 @@
 <div class="page-container">
   <app-bubble-menu></app-bubble-menu>
 
-  <h2 class="page-title">🧺 Lista de Compras</h2>
+  <h2 class="page-title">🧺 Lista de Compras Semanal</h2>
 
   <div class="lista-container">
-    <div class="add-item">
-      <input type="text" placeholder="Agregar ingrediente..." [(ngModel)]="nuevoItem" />
-      <button (click)="agregarItem()">Agregar</button>
+
+    <div *ngIf="cargando" class="loading">
+      Generando lista de compras...
     </div>
 
-    <ul class="lista">
-      <li *ngFor="let item of lista; let i = index">
-        <input type="checkbox" [(ngModel)]="item.comprado" />
-        <span [class.comprado]="item.comprado">{{ item.nombre }}</span>
-        <button class="eliminar" (click)="eliminarItem(i)">✖</button>
+    <ul class="lista" *ngIf="!cargando && lista.length">
+      <li *ngFor="let item of lista">
+        <input
+  type="checkbox"
+  [(ngModel)]="item.comprado"
+  (change)="onToggleComprado(getUsuario().id_usuario)"
+/>
+
+        <span [class.comprado]="item.comprado">
+          {{ item.nombre }} — {{ item.cantidad }} {{ item.unidad }}
+        </span>
       </li>
     </ul>
+
+    <p *ngIf="!cargando && !lista.length" class="empty">
+      No hay recetas asignadas esta semana 🍽️
+    </p>
   </div>
 </div>

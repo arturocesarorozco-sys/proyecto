@@ -1,55 +1,47 @@
-<div class="page">
-  <header class="page-header">
-    <h1>
-      📅 Calendario de Recetas 
-      (Semana {{ semana?.fecha_inicio | date:'dd/MM/yyyy' }} → {{ semana?.fecha_fin | date:'dd/MM/yyyy' }})
-    </h1>
-  </header>
+<div class="contenedor">
+  <h1 class="titulo">📅 Calendario Semanal</h1>
 
-  <main class="page-content">
-    <table class="cal-table">
-      <thead>
-        <tr>
-          <th></th>
-          <th *ngFor="let d of diasOrden">{{ d }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let comida of comidas">
-          <td class="comida-label">{{ comida }}</td>
-          <td *ngFor="let dia of diasOrden">
-            <div class="cell">
-              <ng-container *ngIf="getReceta(dia, comida) as rec; else vacioCell">
-                <div class="receta-mini">
-                  <img *ngIf="rec.imagen" [src]="rec.imagen" alt="{{ rec.titulo }}" />
-                  <div class="texto">
-                    <div class="titulo">{{ rec.titulo }}</div>
-                    <div class="meta">Agregada: {{ rec.creado_en | date:'shortDate' }}</div>
-                  </div>
-                  <div class="acciones">
-                    <button (click)="eliminarDetalle(rec, dia, comida)">Eliminar</button>
-                  </div>
-                </div>
-              </ng-container>
+  <div class="grid-semana">
+    <div class="dia-card" *ngFor="let dia of diasSemana">
+      <h2>{{ dia }}</h2>
 
-              <ng-template #vacioCell>
-                <div class="recetas-list">
-                  <app-misreceta-add-card
-                    *ngFor="let r of misRecetas"
-                    [receta]="r"
-                    [dia]="dia"
-                    [tipo_comida]="comida"
-                    [idSemana]="id_semana"
-                    (agregar)="agregarRecetaAlCalendario(r, dia, comida)">
-                  </app-misreceta-add-card>
-                </div>
-              </ng-template>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </main>
+      <div class="bloque" *ngFor="let tipo of tiposComida">
+        <div class="tipo-row">
+          <span class="tipo-label">{{ tipo | titlecase }}</span>
+          <button class="btn-agregar" (click)="abrirModal(dia, tipo)">
+            Agregar
+          </button>
+        </div>
+
+        <div class="asignado" *ngIf="calendario[dia][tipo]">
+          <p>{{ calendario[dia][tipo].titulo }}</p>
+          <button class="borrar" (click)="eliminarReceta(dia, tipo)">
+            Quitar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div *ngIf="mostrarModal" class="modal-fondo">
+    <div class="modal">
+      <h3>Selecciona una receta</h3>
+
+      <div *ngIf="cargando" class="loading">Cargando recetas...</div>
+
+      <div class="lista-modal">
+        <div *ngFor="let r of recetas" class="modal-item">
+          <app-misreceta-card [receta]="r"></app-misreceta-card>
+          <button class="btn-confirmar" (click)="asignarReceta(r)">
+            Usar esta receta
+          </button>
+        </div>
+      </div>
+
+      <button class="cerrar" (click)="cerrarModal()">Cerrar</button>
+    </div>
+  </div>
 
   <app-bubble-menu></app-bubble-menu>
 </div>

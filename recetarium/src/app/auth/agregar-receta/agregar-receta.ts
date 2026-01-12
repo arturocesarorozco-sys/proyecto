@@ -3,17 +3,21 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { environment } from '../../../environments/environment'
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { debounceTime, distinctUntilChanged, switchMap, of } from 'rxjs';
 import { BubbleMenuComponent } from '../bubble-menu/bubble-menu';
+
 
 @Component({
   selector: 'app-agregar-receta',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule, BubbleMenuComponent],
+  imports: [CommonModule, FormsModule, BubbleMenuComponent, HttpClientModule],
   templateUrl: './agregar-receta.html',
   styleUrls: ['./agregar-receta.css']
 })
 export class AgregarRecetaComponent implements OnInit {
+
+  usuario: any = null;
+  usuarioLogeadoId: number = 0;
+
   receta = {
     titulo: '',
     descripcion: '',
@@ -40,11 +44,17 @@ export class AgregarRecetaComponent implements OnInit {
   sugerencias: any[] = [];
   showSugerencias = false;
 
-  usuarioLogeadoId = 2; // ejemplo: cambiar por tu lógica de login
 
   constructor(private http: HttpClient) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    // 🔥 Cargar usuario del login
+    this.usuario = JSON.parse(localStorage.getItem('usuario') || 'null');
+
+    if (this.usuario) {
+      this.usuarioLogeadoId = this.usuario.id_usuario; // 🔥 ahora usa el ID real del login
+    }
+  }
 
   buscarIngrediente() {
     if (!this.ingredienteActual.nombre.trim()) {
@@ -52,7 +62,8 @@ export class AgregarRecetaComponent implements OnInit {
       return;
     }
 
-    this.http.get<any[]>(`${environment.apiUrl}/api/agregarrecetas/ingredientes/buscar?q=${this.ingredienteActual.nombre}`)
+    this.http
+      .get<any[]>(`${environment.apiUrl}/api/agregarrecetas/ingredientes/buscar?q=${this.ingredienteActual.nombre}`)
       .subscribe(res => {
         this.sugerencias = res;
         this.showSugerencias = res.length > 0;
@@ -88,15 +99,18 @@ export class AgregarRecetaComponent implements OnInit {
   }
 
   guardarReceta() {
-    if (!this.receta.titulo || !this.receta.descripcion) return alert('Título y descripción son obligatorios');
+    if (!this.receta.titulo || !this.receta.descripcion)
+      return alert('Título y descripción son obligatorios');
 
+    // 🔥 Enviar la receta con el ID correcto de usuario
     const payload = { ...this.receta, id_usuario: this.usuarioLogeadoId };
-    this.http.post('${environment.apiUrl}/api/agregarrecetas', payload).subscribe({
-      next: (res: any) => {
+
+    this.http.post(`${environment.apiUrl}/api/agregarrecetas`, payload).subscribe({
+      next: () => {
         alert(`Receta "${this.receta.titulo}" creada exitosamente 🎉`);
         this.limpiarFormulario();
       },
-      error: err => {
+      error: (err) => {
         console.error(err);
         alert('Error al crear la receta');
       }

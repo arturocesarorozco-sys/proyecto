@@ -264,4 +264,66 @@ router.post('/like', async (req, res) => {
   }
 });
 
+
+
+router.post('/agregar-a-mis', async (req, res) => {
+  const { id_usuario, id_receta } = req.body;
+
+  const conn = await pool.getConnection();
+  try {
+    await conn.beginTransaction();
+
+    const [[receta]] = await conn.query(
+      `SELECT * FROM recetas WHERE id_receta = ?`,
+      [id_receta]
+    );
+
+    if (!receta) return res.status(404).json({ error: 'Receta no encontrada' });
+
+    const [nueva] = await conn.query(`
+      INSERT INTO mis_recetas
+      (id_usuario, titulo, descripcion, tiempo_preparacion, dificultad, porciones,
+       id_categoria, imagen, es_vegetariana, es_vegana)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [
+      id_usuario,
+      receta.titulo,
+      receta.descripcion,
+      receta.tiempo_preparacion,
+      receta.dificultad,
+      receta.porciones,
+      receta.id_categoria,
+      receta.imagen,
+      receta.es_vegetariana,
+      receta.es_vegana
+    ]);
+
+    const idNueva = nueva.insertId;
+
+    await conn.query(`
+      INSERT INTO mis_receta_ingrediente (id_mis_receta, id_ingrediente, cantidad, unidad, nota)
+      SELECT ?, id_ingrediente, cantidad, unidad, nota
+      FROM receta_ingrediente
+      WHERE id_receta = ?
+    `, [idNueva, id_receta]);
+
+    await conn.query(`
+      INSERT INTO mis_pasos_receta (id_mis_receta, numero_paso, descripcion, imagen_paso)
+      SELECT ?, numero_paso, descripcion, imagen_paso
+      FROM pasos_receta
+      WHERE id_receta = ?
+    `, [idNueva, id_receta]);
+
+    await conn.commit();
+    res.json({ mensaje: 'Receta agregada a tus recetas' });
+
+  } catch (e) {
+    await conn.rollback();
+    res.status(500).json({ error: 'Error al agregar receta' });
+  } finally {
+    conn.release();
+  }
+});
+
+
 export default router;

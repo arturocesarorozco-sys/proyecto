@@ -2,6 +2,12 @@
 
   <!-- INTRO -->
   <div class="introduccion" (click)="toggleDetalles()" role="button" aria-pressed="{{abierta}}">
+    <button class="btn-publicar"
+        *ngIf="!receta.publicada"
+        (click)="publicarReceta()">
+  🌍 Publicar
+</button>
+
     <div class="imagen-container" *ngIf="receta.imagen">
       <img [src]="receta.imagen" alt="{{ receta.titulo }}" class="imagen-banner" />
     </div>

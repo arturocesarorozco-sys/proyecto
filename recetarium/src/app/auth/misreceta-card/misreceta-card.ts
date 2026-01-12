@@ -133,4 +133,24 @@ export class MisRecetaCardComponent {
     this.mensajeExito = null;
     this.correoDestino = '';
   }
+
+  publicarReceta() {
+  const ok = confirm(
+    '⚠️ ¿Seguro que deseas publicar esta receta?\n\n' +
+    'Una vez publicada NO se podrá eliminar.'
+  );
+
+  if (!ok) return;
+
+  this.http.post(`${environment.apiUrl}/api/misrecetas/publicar`, {
+    id_mis_receta: this.receta.id_mis_receta
+  }).subscribe(() => {
+    alert('🎉 Receta publicada');
+    this.receta.publicada = true;
+  });
 }
+
+}
+
+
+

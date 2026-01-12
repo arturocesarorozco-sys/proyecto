@@ -436,195 +436,61 @@ router.get('/filtrar', async (req, res) => {
 
 
 
+router.post('/publicar', async (req, res) => {
+  const { id_mis_receta } = req.body;
 
-
-
-
-
-
-
-
-
-/* ============================================================
-   MANEJO DEL MENÚ SEMANAL
-   ============================================================ */
-
-const convertirDiaANumero = (dia) => {
-  const map = {
-    "Lunes": 1,
-    "Martes": 2,
-    "Miércoles": 3,
-    "Jueves": 4,
-    "Viernes": 5,
-    "Sábado": 6,
-    "Domingo": 7
-  };
-  return map[dia] || null;
-};
-
-/* ============================================================
-   CREAR SEMANA SI NO EXISTE
-   ============================================================ */
-router.post("/semana/crear", async (req, res) => {
-  const { id_usuario } = req.body;
-
+  const conn = await pool.getConnection();
   try {
-    // ¿Ya existe una semana?
-    const [rows] = await pool.query(
-      "SELECT id_semana FROM semana WHERE id_usuario = ?",
-      [id_usuario]
+    await conn.beginTransaction();
+
+    const [[receta]] = await conn.query(
+      `SELECT * FROM mis_recetas WHERE id_mis_receta = ?`,
+      [id_mis_receta]
     );
 
-    if (rows.length > 0) {
-      return res.json({ mensaje: "La semana ya existe", id_semana: rows[0].id_semana });
-    }
+    if (!receta) return res.status(404).json({ error: 'No encontrada' });
 
-    // Crear nueva semana
-    const [result] = await pool.query(
-      "INSERT INTO semana (id_usuario) VALUES (?)",
-      [id_usuario]
-    );
+    const [pub] = await conn.query(`
+      INSERT INTO recetas
+      (titulo, descripcion, tiempo_preparacion, dificultad, porciones,
+       id_categoria, imagen, es_vegetariana, es_vegana)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [
+      receta.titulo,
+      receta.descripcion,
+      receta.tiempo_preparacion,
+      receta.dificultad,
+      receta.porciones,
+      receta.id_categoria,
+      receta.imagen,
+      receta.es_vegetariana,
+      receta.es_vegana
+    ]);
 
-    res.json({ mensaje: "Semana creada", id_semana: result.insertId });
+    const idReceta = pub.insertId;
 
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error al crear la semana" });
-  }
-});
+    await conn.query(`
+      INSERT INTO receta_ingrediente (id_receta, id_ingrediente, cantidad, unidad, nota)
+      SELECT ?, id_ingrediente, cantidad, unidad, nota
+      FROM mis_receta_ingrediente
+      WHERE id_mis_receta = ?
+    `, [idReceta, id_mis_receta]);
 
-/* ============================================================
-   AGREGAR RECETA A UN DÍA Y TIPO DE COMIDA
-   ============================================================ */
-router.post("/semana/agregar", async (req, res) => {
-  const { id_usuario, dia, tipo_comida, id_mis_receta } = req.body;
+    await conn.query(`
+      INSERT INTO pasos_receta (id_receta, numero_paso, descripcion, imagen_paso)
+      SELECT ?, numero_paso, descripcion, imagen_paso
+      FROM mis_pasos_receta
+      WHERE id_mis_receta = ?
+    `, [idReceta, id_mis_receta]);
 
-  if (!id_usuario || !dia || !tipo_comida || !id_mis_receta)
-    return res.status(400).json({ error: "Faltan datos obligatorios" });
+    await conn.commit();
+    res.json({ mensaje: 'Receta publicada' });
 
-  try {
-    const numeroDia = convertirDiaANumero(dia);
-
-    // Obtener semana del usuario
-    const [[semana]] = await pool.query(
-      "SELECT id_semana FROM semana WHERE id_usuario = ?",
-      [id_usuario]
-    );
-
-    if (!semana)
-      return res.status(404).json({ error: "El usuario no tiene semana creada" });
-
-    // Si ya existe receta para ese día/comida, reemplazar
-    await pool.query(
-      `
-      DELETE FROM semana_recetas
-      WHERE id_semana = ? AND dia = ? AND tipo_comida = ?
-      `,
-      [semana.id_semana, numeroDia, tipo_comida]
-    );
-
-    // Insertar nueva receta
-    await pool.query(
-      `
-      INSERT INTO semana_recetas (id_semana, dia, tipo_comida, id_mis_receta)
-      VALUES (?, ?, ?, ?)
-      `,
-      [semana.id_semana, numeroDia, tipo_comida, id_mis_receta]
-    );
-
-    res.json({ mensaje: "Receta asignada al calendario" });
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error al agregar receta a la semana" });
-  }
-});
-
-/* ============================================================
-   OBTENER SEMANA COMPLETA (con recetas)
-   ============================================================ */
-router.get("/semana/:id_usuario", async (req, res) => {
-  const { id_usuario } = req.params;
-
-  try {
-    const [[semana]] = await pool.query(
-      "SELECT id_semana FROM semana WHERE id_usuario = ?",
-      [id_usuario]
-    );
-
-    if (!semana)
-      return res.json([]);
-
-    const [detalles] = await pool.query(
-      `
-      SELECT 
-        sr.id_detalle,
-        sr.dia,
-        sr.tipo_comida,
-        r.id_mis_receta,
-        r.titulo,
-        r.imagen
-      FROM semana_recetas sr
-      INNER JOIN mis_recetas r ON sr.id_mis_receta = r.id_mis_receta
-      WHERE sr.id_semana = ?
-      ORDER BY sr.dia ASC
-      `,
-      [semana.id_semana]
-    );
-
-    res.json(detalles);
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error al obtener semana" });
-  }
-});
-
-/* ============================================================
-   ELIMINAR UNA RECETA DE UN DÍA
-   ============================================================ */
-router.delete("/semana/eliminar/:id_detalle", async (req, res) => {
-  const { id_detalle } = req.params;
-
-  try {
-    await pool.query(
-      "DELETE FROM semana_recetas WHERE id_detalle = ?",
-      [id_detalle]
-    );
-
-    res.json({ mensaje: "Eliminado del calendario" });
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error al eliminar receta de la semana" });
-  }
-});
-
-/* ============================================================
-   LIMPIAR TODA LA SEMANA DEL USUARIO
-   ============================================================ */
-router.delete("/semana/limpiar/:id_usuario", async (req, res) => {
-  const { id_usuario } = req.params;
-
-  try {
-    const [[semana]] = await pool.query(
-      "SELECT id_semana FROM semana WHERE id_usuario = ?",
-      [id_usuario]
-    );
-
-    if (!semana)
-      return res.json({ mensaje: "No había semana creada" });
-
-    await pool.query(
-      "DELETE FROM semana_recetas WHERE id_semana = ?",
-      [semana.id_semana]
-    );
-
-    res.json({ mensaje: "Semana limpiada" });
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error al limpiar la semana" });
+  } catch (e) {
+    await conn.rollback();
+    res.status(500).json({ error: 'Error al publicar' });
+  } finally {
+    conn.release();
   }
 });
 

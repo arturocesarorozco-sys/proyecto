@@ -1,139 +1,169 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, Inject } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { MisRecetaAddCardComponent } from '../misreceta-add-card/misreceta-add-card';
-import { BubbleMenuComponent } from '../bubble-menu/bubble-menu';
-
-interface RecetaDetalle {
-  id_detalle: number;
-  id_mis_receta: number;
-  titulo: string;
-  imagen?: string;
-  creado_en?: string;
-}
-
-type TipoComida = 'Desayuno' | 'Comida' | 'Cena';
-
-interface DiaSemana {
-  Desayuno: RecetaDetalle | null;
-  Comida: RecetaDetalle | null;
-  Cena: RecetaDetalle | null;
-}
-
-interface Semana {
-  id_semana: number;
-  fecha_inicio: string;
-  fecha_fin: string;
-  dias: Record<string, DiaSemana>;
-}
-
-interface MisReceta {
-  id_mis_receta: number;
-  titulo: string;
-  descripcion?: string;
-  imagen?: string;
-  categoria_nombre?: string;
-  es_vegana?: boolean;
-  es_vegetariana?: boolean;
-  tiempo_preparacion?: number;
-  porciones?: number;
-  dificultad?: string;
-  ingredientes?: any[];
-  pasos?: any[];
-}
+import { FormsModule } from '@angular/forms';
+import { PLATFORM_ID } from '@angular/core';
+import { environment } from '../../../environments/environment';
+import { MisRecetaCardComponent } from '../misreceta-card/misreceta-card';
+import { BubbleMenuComponent } from '../../auth/bubble-menu/bubble-menu';
 
 @Component({
   selector: 'app-calendario',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, MisRecetaAddCardComponent, BubbleMenuComponent],
+  imports: [
+    CommonModule,
+    HttpClientModule,
+    FormsModule,
+    MisRecetaCardComponent,
+    BubbleMenuComponent
+  ],
   templateUrl: './calendario.html',
   styleUrls: ['./calendario.css']
 })
 export class CalendarioComponent implements OnInit {
-  id_usuario = 1;
-  semana: Semana | null = null;
-  diasOrden = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
-  comidas: TipoComida[] = ['Desayuno','Comida','Cena'];
 
-  misRecetas: MisReceta[] = [];
+  diasSemana = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+  tiposComida = ['desayuno','comida','cena'];
 
-  id_semana = 0;
+  calendario: any = {};
+  recetas: any[] = [];
 
-  baseSemana = '/api/semana';
-  baseRecetas = '/api/misrecetas';
+  cargando = false;
+  mostrarModal = false;
 
-  constructor(private http: HttpClient) {}
+  seleccionado: { dia: string; tipo: string } | null = null;
 
-  ngOnInit() {
-    const u = JSON.parse(localStorage.getItem('usuario') || 'null');
-    if (u && u.id_usuario) this.id_usuario = u.id_usuario;
+  constructor(
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
-    this.cargarSemana();
+  ngOnInit(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    this.inicializarCalendario();
     this.cargarMisRecetas();
+    this.cargarCalendario();
   }
 
-  cargarSemana() {
-    this.http.get<any[]>(`${this.baseSemana}/usuario/${this.id_usuario}`)
-      .subscribe({
-        next: (res) => {
-          if (!res.length) return;
-          const sem = res[0];
-          this.semana = {
-            id_semana: sem.id_semana,
-            fecha_inicio: sem.fecha_inicio,
-            fecha_fin: sem.fecha_fin,
-            dias: {}
-          };
-          this.diasOrden.forEach(d => {
-            this.semana!.dias[d] = { Desayuno: null, Comida: null, Cena: null };
-          });
-          if (sem.detalle) {
-            for (const det of sem.detalle) {
-              const dia = det.dia;
-              const tipo = det.tipo_comida as TipoComida;
-              if (this.semana.dias[dia]) {
-                this.semana.dias[dia][tipo] = det;
-              }
-            }
-          }
-          this.id_semana = sem.id_semana;
-        },
-        error: err => console.error(err)
-      });
+  /* ===================== */
+  /* UTILIDADES */
+  /* ===================== */
+  getUsuario() {
+    try {
+      return JSON.parse(localStorage.getItem('usuario') || '{}');
+    } catch {
+      return null;
+    }
   }
 
+  inicializarCalendario() {
+    this.calendario = {};
+    this.diasSemana.forEach(dia => {
+      this.calendario[dia] = {
+        desayuno: null,
+        comida: null,
+        cena: null
+      };
+    });
+  }
+
+  /* ===================== */
+  /* CARGAR DATOS */
+  /* ===================== */
   cargarMisRecetas() {
-    this.http.get<MisReceta[]>(`${this.baseRecetas}/usuario/${this.id_usuario}`)
-      .subscribe({
-        next: res => this.misRecetas = res,
-        error: err => console.error(err)
-      });
+    const usuario = this.getUsuario();
+    if (!usuario?.id_usuario) return;
+
+    this.cargando = true;
+
+    this.http.get<any[]>(
+      `${environment.apiUrl}/api/misrecetas/mis/${usuario.id_usuario}`
+    ).subscribe({
+      next: res => {
+        this.recetas = res || [];
+        this.cargando = false;
+      },
+      error: () => this.cargando = false
+    });
   }
 
-  agregarRecetaAlCalendario(receta: MisReceta, dia: string, tipo_comida: TipoComida) {
+  cargarCalendario() {
+    const usuario = this.getUsuario();
+    if (!usuario?.id_usuario) return;
+
+    this.http.get<any[]>(
+      `${environment.apiUrl}/api/calendario/${usuario.id_usuario}`
+    ).subscribe({
+      next: res => {
+        this.inicializarCalendario();
+
+        res.forEach(item => {
+          const diaNombre = this.diasSemana[item.dia - 1];
+          this.calendario[diaNombre][item.tipo_comida] = item;
+        });
+      },
+      error: err => console.error(err)
+    });
+  }
+
+  /* ===================== */
+  /* MODAL */
+  /* ===================== */
+  abrirModal(dia: string, tipo: string) {
+    this.seleccionado = { dia, tipo };
+    this.mostrarModal = true;
+  }
+
+  cerrarModal() {
+    this.mostrarModal = false;
+    this.seleccionado = null;
+  }
+
+  /* ===================== */
+  /* ASIGNAR / ELIMINAR */
+  /* ===================== */
+  asignarReceta(receta: any) {
+    if (!this.seleccionado) return;
+
+    const usuario = this.getUsuario();
+    if (!usuario?.id_usuario) return;
+
     const payload = {
-      id_semana: this.id_semana,
-      id_mis_receta: receta.id_mis_receta,
-      dia,
-      tipo_comida
+      id_usuario: usuario.id_usuario,
+      dia: this.diasSemana.indexOf(this.seleccionado.dia) + 1,
+      tipo_comida: this.seleccionado.tipo,
+      id_mis_receta: receta.id_mis_receta
     };
-    this.http.post(`${this.baseSemana}/agregar`, payload).subscribe({
-      next: () => this.cargarSemana(),
+
+    this.http.post(
+      `${environment.apiUrl}/api/calendario/asignar`,
+      payload
+    ).subscribe({
+      next: () => {
+        this.cerrarModal();
+        this.cargarCalendario();
+      },
       error: err => console.error(err)
     });
   }
 
-  eliminarDetalle(detalle: RecetaDetalle, dia: string, tipo_comida: TipoComida) {
-    if (!detalle.id_detalle) return;
-    if (!confirm('¿Eliminar esta receta del calendario?')) return;
+  eliminarReceta(dia: string, tipo: string) {
+    const usuario = this.getUsuario();
+    if (!usuario?.id_usuario) return;
 
-    this.http.delete(`${this.baseSemana}/eliminar/${detalle.id_detalle}`).subscribe({
-      next: () => this.cargarSemana(),
+    const payload = {
+      id_usuario: usuario.id_usuario,
+      dia: this.diasSemana.indexOf(dia) + 1,
+      tipo_comida: tipo
+    };
+
+    this.http.post(
+      `${environment.apiUrl}/api/calendario/eliminar`,
+      payload
+    ).subscribe({
+      next: () => this.cargarCalendario(),
       error: err => console.error(err)
     });
-  }
-
-  getReceta(dia: string, comida: TipoComida) {
-    return this.semana?.dias[dia]?.[comida] || null;
   }
 }

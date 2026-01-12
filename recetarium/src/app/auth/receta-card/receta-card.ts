@@ -7,10 +7,7 @@ import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-receta-card',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule
-  ],
+  imports: [CommonModule, FormsModule],
   templateUrl: './receta-card.html',
   styleUrls: ['./receta-card.css']
 })
@@ -23,7 +20,7 @@ export class RecetaCardComponent implements OnInit {
   cargando = false;
 
   comentarios: any[] = [];
-  nuevoComentario = "";
+  nuevoComentario = '';
   likes = 0;
   liked = false;
 
@@ -32,10 +29,25 @@ export class RecetaCardComponent implements OnInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    // Solo acceder a localStorage si estamos en el navegador
     if (typeof window !== 'undefined') {
-      const storedId = localStorage.getItem("id_usuario");
-      this.idUsuario = storedId ? Number(storedId) : null;
+
+      // 🔹 CASO 1: id_usuario directo
+      const id = localStorage.getItem('id_usuario');
+      if (id) {
+        this.idUsuario = Number(id);
+        return;
+      }
+
+      // 🔹 CASO 2: usuario completo guardado
+      const usuarioStr = localStorage.getItem('usuario');
+      if (usuarioStr) {
+        try {
+          const usuario = JSON.parse(usuarioStr);
+          this.idUsuario = usuario.id_usuario ?? null;
+        } catch {
+          this.idUsuario = null;
+        }
+      }
     }
   }
 
@@ -47,66 +59,68 @@ export class RecetaCardComponent implements OnInit {
 
     this.cargando = true;
 
-    this.http.get(`${environment.apiUrl}/api/recetas/${this.receta.id_receta}`).subscribe({
-      next: (data) => {
-        this.detalles = data;
-        this.abierta = true;
-        this.cargarSocial();
-        this.cargando = false;
-      },
-      error: () => this.cargando = false
-    });
+    this.http.get(`${environment.apiUrl}/api/recetas/${this.receta.id_receta}`)
+      .subscribe({
+        next: (data) => {
+          this.detalles = data;
+          this.abierta = true;
+          this.cargarSocial();
+          this.cargando = false;
+        },
+        error: () => this.cargando = false
+      });
   }
 
-  // Carga comentarios y likes de la receta
   cargarSocial() {
     this.http.get<any>(`${environment.apiUrl}/api/recetas/${this.receta.id_receta}/social`)
       .subscribe(res => {
         this.comentarios = res.comentarios;
         this.likes = res.likes;
-
-        // Ver si el usuario actual ya dio like
-        if (this.idUsuario) {
-          this.liked = res.comentarios.some((c: any) => c.id_usuario === this.idUsuario) ? true : this.liked;
-        }
       });
   }
 
-  // Publicar un nuevo comentario
   enviarComentario() {
-    if (!this.nuevoComentario.trim() || !this.idUsuario) return;
+    if (!this.nuevoComentario.trim() || !this.idUsuario) {
+      alert('Debes iniciar sesión');
+      return;
+    }
 
-    const body = {
+    this.http.post(`${environment.apiUrl}/api/recetas/comentar`, {
       id_usuario: this.idUsuario,
       id_receta: this.receta.id_receta,
       comentario: this.nuevoComentario
-    };
-
-    this.http.post(`${environment.apiUrl}/api/recetas/comentar`, body)
-      .subscribe((res: any) => {
-        this.nuevoComentario = "";
-        // Actualizar comentarios desde la respuesta del backend
-        if (res.comentarios) {
-          this.comentarios = res.comentarios;
-        } else {
-          this.cargarSocial();
-        }
-      });
+    }).subscribe((res: any) => {
+      this.nuevoComentario = '';
+      this.comentarios = res.comentarios ?? this.comentarios;
+    });
   }
 
-  // Dar o quitar like
   toggleLike() {
-    if (!this.idUsuario) return;
+    if (!this.idUsuario) {
+      alert('Debes iniciar sesión');
+      return;
+    }
 
-    const body = {
+    this.http.post(`${environment.apiUrl}/api/recetas/like`, {
       id_usuario: this.idUsuario,
       id_receta: this.receta.id_receta
-    };
+    }).subscribe((res: any) => {
+      this.liked = res.liked;
+      this.likes = res.likes;
+    });
+  }
 
-    this.http.post(`${environment.apiUrl}/api/recetas/like`, body)
-      .subscribe((res: any) => {
-        this.liked = res.liked;
-        this.likes = res.likes; // Actualiza directamente el número de likes
-      });
+  agregarAMisRecetas() {
+    if (!this.idUsuario) {
+      alert('Debes iniciar sesión');
+      return;
+    }
+
+    this.http.post(`${environment.apiUrl}/api/recetas/agregar-a-mis`, {
+      id_usuario: this.idUsuario,
+      id_receta: this.receta.id_receta
+    }).subscribe(() => {
+      alert('Receta agregada a tus recetas ❤️');
+    });
   }
 }

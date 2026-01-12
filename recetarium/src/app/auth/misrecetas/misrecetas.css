@@ -1,38 +1,48 @@
+/* ---------------------------------------- */
+/* CARD CONTENEDOR */
+/* ---------------------------------------- */
 .receta-card {
   width: 100%;
-  max-width: 650px;
+  max-width: 680px;
   margin: 1.2rem auto;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  border-radius: 18px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
   overflow: hidden;
   font-family: "Poppins", sans-serif;
   display: flex;
   flex-direction: column;
-  transition: all 0.3s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-/* --- INTRODUCCIÓN --- */
+.receta-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
+}
+
+/* ---------------------------------------- */
+/* INTRODUCCIÓN */
+/* ---------------------------------------- */
 .introduccion {
-  background-color: #ff8c42;
+  background: linear-gradient(180deg, #ff8c42, #ff7a1f);
   color: #fff;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, padding 0.3s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  height: 220px; /* altura fija */
+  height: 220px;
   position: relative;
 }
 
 .introduccion:hover {
-  background-color: #ff7a1f;
+  background: linear-gradient(180deg, #ff7a1f, #ff6a10);
 }
 
-/* Imagen grande arriba */
+/* Imagen superior */
 .imagen-container {
   width: 100%;
-  height: 120px;
+  height: 125px;
   overflow: hidden;
 }
 
@@ -44,7 +54,7 @@
 
 /* Texto intro */
 .texto {
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1.2rem;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -53,13 +63,13 @@
 
 .texto h2 {
   margin: 0;
-  font-size: 1.4rem;
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
   font-weight: 600;
 }
 
 .categoria {
   font-style: italic;
-  opacity: 0.9;
+  opacity: 0.95;
   margin: 0.2rem 0;
 }
 
@@ -67,7 +77,7 @@
   font-size: 0.95rem;
   opacity: 0.95;
   margin: 0;
-  line-height: 1.2rem;
+  line-height: 1.25rem;
 }
 
 /* Flecha */
@@ -75,11 +85,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.4rem;
 }
 
 .flecha {
-  font-size: 1.6rem;
+  font-size: 1.7rem;
   transition: transform 0.3s ease;
 }
 
@@ -87,18 +97,22 @@
   transform: rotate(180deg);
 }
 
-/* --- DETALLES --- */
+/* ---------------------------------------- */
+/* DETALLES */
+/* ---------------------------------------- */
 .detalles {
   background-color: #fff;
   color: #333;
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.5s ease, padding 0.3s ease;
+  transition:
+    max-height 0.55s ease,
+    padding 0.35s ease;
 }
 
 .detalles.abierto {
   padding: 1rem;
-  max-height: 2000px;
+  max-height: 2400px;
 }
 
 .loading {
@@ -108,11 +122,14 @@
   font-weight: 500;
 }
 
+/* Imagen dentro de los detalles */
 .contenido-detalle img.imagen-receta {
   width: 100%;
-  max-height: 300px;
+  max-height: 320px;
   object-fit: cover;
+  border-radius: 12px;
   margin-bottom: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
 }
 
 .contenido-detalle p {
@@ -121,39 +138,42 @@
 
 .contenido-detalle h4 {
   color: #ff8c42;
-  margin-top: 0.8rem;
+  margin-top: 0.9rem;
+  font-size: 1.1rem;
 }
 
 .contenido-detalle ul,
 .contenido-detalle ol {
-  margin: 0.5rem 0 1rem 1.5rem;
+  margin: 0.5rem 0 1rem 1.6rem;
 }
 
-/* --- BOTÓN ENVIAR --- */
+/* ---------------------------------------- */
+/* BOTÓN ENVIAR */
+/* ---------------------------------------- */
 .btn-enviar {
-  margin-top: 1rem;
+  margin-top: 1.2rem;
   background: #4da3ff;
   color: #fff;
   border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 10px;
+  padding: 0.65rem 1.2rem;
+  border-radius: 12px;
   cursor: pointer;
   font-weight: 600;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, transform 0.15s ease;
 }
 
 .btn-enviar:hover {
   background: #1f8dff;
+  transform: translateY(-2px);
 }
 
-/* --- POPUP --- */
+/* ---------------------------------------- */
+/* POPUP */
+/* ---------------------------------------- */
 .popup-fondo {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.6);
+  inset: 0;
+  background: rgba(0,0,0,0.55);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -163,37 +183,38 @@
 
 .popup {
   background: #fff;
-  padding: 1.5rem;
-  border-radius: 15px;
+  padding: 1.6rem;
+  border-radius: 18px;
   width: 90%;
-  max-width: 400px;
+  max-width: 420px;
   text-align: center;
   animation: aparecer 0.3s ease;
 }
 
 .popup h3 {
-  margin: 0;
-  margin-bottom: 1rem;
+  margin: 0 0 1rem 0;
   color: #333;
+  font-size: 1.3rem;
 }
 
 .popup input {
-  width: 90%;
-  padding: 8px;
+  width: 95%;
+  padding: 10px;
   margin: 10px 0;
-  border-radius: 8px;
+  border-radius: 10px;
   border: 1px solid #ccc;
+  font-size: 1rem;
 }
 
 .botones {
   display: flex;
-  justify-content: space-around;
-  margin-top: 1rem;
+  justify-content: space-between;
+  margin-top: 1.2rem;
 }
 
 .botones button {
-  padding: 0.5rem 1rem;
-  border-radius: 10px;
+  padding: 0.55rem 1.2rem;
+  border-radius: 12px;
   border: none;
   cursor: pointer;
   font-weight: 600;
@@ -209,8 +230,43 @@
   color: white;
 }
 
-/* Animación popup */
+/* Animación */
 @keyframes aparecer {
-  from { transform: scale(0.6); opacity: 0; }
-  to   { transform: scale(1); opacity: 1; }
+  from {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ---------------------------------------- */
+/* RESPONSIVE */
+/* ---------------------------------------- */
+@media (max-width: 480px) {
+  .introduccion {
+    height: 200px;
+  }
+
+  .imagen-container {
+    height: 110px;
+  }
+
+  .texto h2 {
+    font-size: 1.2rem;
+  }
+
+  .descripcion {
+    font-size: 0.9rem;
+  }
+
+  .flecha {
+    font-size: 1.4rem;
+  }
+
+  .popup {
+    padding: 1.2rem;
+  }
 }
